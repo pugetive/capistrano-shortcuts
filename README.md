@@ -35,7 +35,7 @@ Push or pull a copy of the database to or from the environment:
 
 Pull a copy of the production database to local machine, run migrations to update to development mode, then push the fresh and updated version to staging:
 
-   cap <environment> db:sync
+    cap <environment> db:sync
 
 ## Config Files
 
