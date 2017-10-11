@@ -25,6 +25,28 @@ And include the tasks via your Capfile:
 
     require 'capistrano/shortcuts'
 
+## Config Files
+
+Push all config files listed in the :linked_files variable to the specified environment:
+
+    cap <environment> config:push
+
+
+Pull all config files listed in the :linked_files variable down from the specified environment:
+
+    cap <environment> config:pull
+
+
+Symlink environment-specific .htaccess and robots.txt files to their expected location:
+
+    cap <environment> config:symlink
+
+
+Push the config files and restart the server to pick up changes immediately:
+
+    cap <environment> config:reconfig
+
+
 ## Maintenance Mode
 
 Install the maintenance page and show it instead of executing the web app:
