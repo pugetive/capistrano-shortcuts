@@ -25,8 +25,19 @@ And include the tasks via your Capfile:
 
     require 'capistrano/shortcuts'
 
+## Maintenance Mode
 
-## Usage
+Install the maintenance page and show it instead of executing the web app:
+
+    cap <environment> deploy:web:disable
+
+
+Resume normal operation:
+
+    cap <environment> deploy:web:enable
+
+
+## Memcache
 
 Clears all data stored in memcache by restarting the server. This task requires passwordless sudo to be set up on the server.
 
