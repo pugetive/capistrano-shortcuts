@@ -61,15 +61,12 @@ Resume normal operation:
 
 ## Apache
 
-Reload apache:
+Reload or restart apache:
 
     cap <environment> apache:reload
-
-Restart apache:
-
     cap <environment> apache:restart
 
-Copy all domain-related config files from the rails repo "config/apache" directory into the sites-available directory for apache to pick up, and re-enable the website specified in <code>&lt;domain-name.conf&gt;</code> as well as <code>assets.&lt;domain-name&gt;.conf</code>:
+Copy all domain-related config files from the rails repo "config/apache" directory into the sites-available directory for apache to pick up, and re-enable the website specified in <code>&lt;domain-name&gt;.conf</code> as well as <code>assets.&lt;domain-name&gt;.conf</code>:
 
     cap <environment> apache:install
 
