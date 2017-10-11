@@ -25,6 +25,18 @@ And include the tasks via your Capfile:
 
     require 'capistrano/shortcuts'
 
+
+## MySQL Database Tasks
+
+Push or pull a copy of the database to or from the environment:
+
+    cap <environment> db:pull
+    cap <environment> db:push
+
+Pull a copy of the production database to local machine, run migrations to update to development mode, then push the fresh and updated version to staging:
+
+   cap <environment> db:sync
+
 ## Config Files
 
 Push all config files listed in the :linked_files variable to the specified environment:

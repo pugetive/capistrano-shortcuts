@@ -1,6 +1,6 @@
 require "capistrano/shortcuts/version"
 
-[:apache, :config, :memcache, :web].each do |token|
+[:apache, :config, :database, :memcache, :web].each do |token|
   load File.expand_path("../shortcuts/tasks/deploy_#{token}.rake", __FILE__)
 end
 
