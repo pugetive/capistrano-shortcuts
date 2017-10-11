@@ -59,6 +59,20 @@ Resume normal operation:
     cap <environment> deploy:web:enable
 
 
+## Apache
+
+Reload apache:
+
+    cap <environment> apache:reload
+
+Restart apache:
+
+    cap <environment> apache:restart
+
+Copy all domain-related config files from the rails repo "config/apache" directory into the sites-available directory for apache to pick up, and re-enable the website specified in <code>&lt;domain-name.conf&gt;</code> as well as <code>assets.&lt;domain-name&gt;.conf</code>:
+
+    cap <environment> apache:install
+
 ## Memcache
 
 Clears all data stored in memcache by restarting the server. This task requires passwordless sudo to be set up on the server.
