@@ -1,8 +1,7 @@
 # Capistrano::Shortcuts
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/capistrano/shortcuts`. To experiment with that code, run `bin/console` for an interactive prompt.
+This gem simply encapsulate the common custom server tasks I use to manage Rails projects. It assumes a two-tiered development including both staging and production environments.
 
-TODO: Delete this and the text above, and describe your gem
 
 ## Installation
 
@@ -12,6 +11,7 @@ Add this line to your application's Gemfile:
 gem 'capistrano-shortcuts'
 ```
 
+
 And then execute:
 
     $ bundle
@@ -20,9 +20,17 @@ Or install it yourself as:
 
     $ gem install capistrano-shortcuts
 
+
+And include the tasks via your Capfile:
+
+    require 'capistrano/shortcuts'
+
+
 ## Usage
 
-TODO: Write usage instructions here
+Clears all data stored in memcache by restarting the server. This task requires passwordless sudo to be set up on the server.
+
+    cap <environment> memcache:flush
 
 ## Development
 
