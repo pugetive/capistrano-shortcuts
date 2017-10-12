@@ -47,8 +47,11 @@ namespace :db do
   task :push_db do
 
     if freeze_production and fetch(:rails_env) == 'production'
-      raise "By default, I won't push the local database to production. To override this protection add this to deploy.rb:\nset :production_protected, false'
-"
+      run_locally do
+        execute("rm #{dump_file}.gz")
+        raise "By default, I won't push the local database to production. To override this protection add this to deploy.rb:\n" +
+              "set :production_protected, false'"
+      end
     end
     run_locally do
       if db_config[fetch(:rails_env)]['host'].nil?
