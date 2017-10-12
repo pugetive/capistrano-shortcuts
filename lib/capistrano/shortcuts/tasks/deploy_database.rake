@@ -1,10 +1,9 @@
-production_protected = true
-
 namespace :db do
 
   db_config = YAML::load_file('config/database.yml')
   local_rails_env = 'development'
   dump_file = "capistrano-dump.sql"
+
 
   task pull: [:dump_remote_db, :pull_db, :load_local_db]
   task push: [:dump_local_db, :push_db, :load_remote_db]
@@ -46,8 +45,10 @@ namespace :db do
   end
 
   task :push_db do
-    if production_protected and fetch(:rails_env) == 'production'
-      raise "Sorry, I refuse to push the local database to production."
+
+    if freeze_production and fetch(:rails_env) == 'production'
+      raise "By default, I won't push the local database to production. To override this protection add this to deploy.rb:\nset :production_protected, false'
+"
     end
     run_locally do
       if db_config[fetch(:rails_env)]['host'].nil?
@@ -65,8 +66,9 @@ namespace :db do
   end
 
   task :load_remote_db do
-    if production_protected and fetch(:rails_env) == 'production'
-      raise "Sorry, I won't load the remote database on production."
+    if freeze_production and fetch(:rails_env) == 'production'
+      raise "Sorry, I won't load the remote database to production. To override this protection:\n set :production_protected, false'
+"
     end
     on roles(:db) do
       load_db(db_config[fetch(:rails_env)], "~/#{dump_file}")
@@ -91,6 +93,12 @@ namespace :db do
             "< #{input_file}")
   end
 
+
+  def freeze_production
+    return true if fetch(:production_protected).nil?
+
+    fetch(:production_protected)
+  end
   # task :backup do
   #   on roles(:db) do
   #     dump_file = "cap-backup-#{Time.now.to_i}.sql"
