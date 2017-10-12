@@ -1,3 +1,5 @@
+require 'capistrano'
+
 namespace :apache do
   task :install do
     on roles(:app) do

@@ -32,4 +32,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.16.a"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "capistrano", "~> 3.0"
 end
