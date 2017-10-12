@@ -8,7 +8,7 @@ This gem simply encapsulate the common custom server tasks I use to manage Rails
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'capistrano-shortcuts'
+gem 'capistrano-shortcuts', require: false
 ```
 
 
