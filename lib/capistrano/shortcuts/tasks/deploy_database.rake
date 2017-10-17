@@ -22,7 +22,12 @@ namespace :db do
         else
           domain = db_config[fetch(:rails_env)]['host']
         end
-        execute("scp -i #{fetch(:aws_key_pair)} #{fetch(:user)}@#{domain}:~/#{dump_file}.gz .")
+        command = "scp "
+        if fetch(:aws_key_pair)
+          command += "-i #{fetch(:aws_key_pair)} "
+        end
+        command += "#{fetch(:user)}@#{domain}:~/#{dump_file}.gz ."
+        execute(command)
       end
       execute("rm #{dump_file}.gz")
       run_locally do
@@ -60,7 +65,12 @@ namespace :db do
         domain = db_config[fetch(:rails_env)]['host']
       end
 
-      execute("scp -i #{fetch(:aws_key_pair)} #{dump_file}.gz #{fetch(:user)}@#{domain}:~")
+      command = "scp "
+      if fetch(:aws_key_pair)
+        command += "-i #{fetch(:aws_key_pair)} "
+      end
+      command += "#{dump_file}.gz #{fetch(:user)}@#{domain}:~"
+      execute(command)
       execute("rm #{dump_file}.gz")
     end
     on roles(:db) do
@@ -80,11 +90,15 @@ namespace :db do
   end
 
   def dump_db(config, output_file)
-    execute("MYSQL_PWD=#{config['password']} " +
+    command = "MYSQL_PWD=#{config['password']} " +
             "mysqldump -f " +
-            "-u #{config['username']} " +
-            "#{config['database']} " +
-            "-r #{output_file}")
+            "-u #{config['username']} "
+    if config['db_host']
+      command += "-h #{config['db_host']} "
+    end
+    command += "#{config['database']} " +
+               "-r #{output_file}"
+    execute(command)
     execute("gzip -f #{output_file}")
   end
 
