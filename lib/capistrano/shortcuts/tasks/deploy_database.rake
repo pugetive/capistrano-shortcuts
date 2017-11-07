@@ -58,6 +58,7 @@ namespace :db do
               "set :production_protected, false'"
       end
     end
+
     run_locally do
       if db_config[fetch(:rails_env)]['host'].nil?
         domain = fetch(:domain)
@@ -103,11 +104,17 @@ namespace :db do
   end
 
   def load_db(config, input_file)
-    execute("MYSQL_PWD=#{config['password']} " +
-            "mysql " +
-            "-u #{config['username']} " +
-            "#{config['database']} " +
-            "< #{input_file}")
+    command = "MYSQL_PWD=#{config['password']} " +
+              "mysql " +
+              "-u #{config['username']} "
+
+    if config['db_host']
+      command += "-h #{config['db_host']} "
+    end
+
+    command += "#{config['database']} " +
+               "< #{input_file}"
+    execute(command)
   end
 
 
