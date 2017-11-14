@@ -2,8 +2,7 @@ namespace :db do
 
   db_config = YAML::load_file('config/database.yml')
   local_rails_env = 'development'
-  dump_file = "capistrano-dump.sql"
-
+  dump_file = "capistrano-dump-#{Time.now.to_i}.sql"
 
   task pull: [:dump_remote_db, :pull_db, :load_local_db]
   task push: [:dump_local_db, :push_db, :load_remote_db]
@@ -123,21 +122,8 @@ namespace :db do
 
     fetch(:production_protected)
   end
-  # task :backup do
-  #   on roles(:db) do
-  #     dump_file = "cap-backup-#{Time.now.to_i}.sql"
-  #     execute("mysqldump " +
-  #         "-u #{db_config[fetch(:rails_env)]['username']} " +
-  #         "-h #{db_config[fetch(:rails_env)]['host']} " +
-  #         "-p " +
-  #         "#{db_config[fetch(:rails_env)]['database']} " +
-  #         "> #{dump_file}") do |ch, _, out| 
-  #       if out =~ /^Enter password: /
-  #         ch.send_data "#{db_config[fetch(:rails_env)]['password']}\n"
-  #       else
-  #         puts out 
-  #       end
-  #     end
-  #   end
-  # end
+
+  task dump: :dump_remote_db
+  task backup: :dump
+
 end

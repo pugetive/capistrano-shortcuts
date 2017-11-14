@@ -37,6 +37,15 @@ Pull a copy of the production database to local machine, run migrations to updat
 
     cap <environment> db:sync
 
+
+Mysqldump the remote database to a timestamped (also remote) file. These are synonyms:
+
+    cap <environment> db:dump
+
+...or..
+
+    cap <environment> db:backup
+
 ## Config Files
 
 Push all config files listed in the :linked_files variable to the specified environment:
