@@ -2,7 +2,7 @@ namespace :db do
 
   db_config = YAML::load_file('config/database.yml')
   local_rails_env = 'development'
-  dump_file = "capistrano-dump-#{Time.now.to_i}.sql"
+  dump_file = "capistrano-shortcuts-dump-#{Time.now.to_i}.sql"
 
   task pull: [:dump_remote_db, :pull_db, :load_local_db]
   task push: [:dump_local_db, :push_db, :load_remote_db]
@@ -29,22 +29,19 @@ namespace :db do
         execute(command)
       end
       execute("rm #{dump_file}.gz")
-      run_locally do
-        execute("gunzip -f #{dump_file}.gz")
-      end
     end
   end
 
   task :load_local_db do
     run_locally do
-      load_db(db_config[local_rails_env], dump_file)
-      execute("rm #{dump_file}")
+      load_db(db_config[local_rails_env], "#{dump_file}.gz")
+      execute("rm #{dump_file}.gz")
     end
   end
 
   task :dump_local_db do
     run_locally do
-      dump_db(db_config[local_rails_env], dump_file)
+      dump_db(db_config[local_rails_env], "#{dump_file}")
     end
   end
 
@@ -73,9 +70,6 @@ namespace :db do
       execute(command)
       execute("rm #{dump_file}.gz")
     end
-    on roles(:db) do
-      execute("gunzip -f #{dump_file}.gz")
-    end
   end
 
   task :load_remote_db do
@@ -85,7 +79,7 @@ namespace :db do
     end
     on roles(:db) do
       load_db(db_config[fetch(:rails_env)], "~/#{dump_file}")
-      execute("rm #{dump_file}")
+      execute("rm #{dump_file}.gz")
     end
   end
 
@@ -103,16 +97,14 @@ namespace :db do
   end
 
   def load_db(config, input_file)
-    command = "MYSQL_PWD=#{config['password']} " +
+    command = "gunzip -c #{input_file} | " +
+              "MYSQL_PWD=#{config['password']} " +
               "mysql " +
               "-u #{config['username']} "
-
     if config['db_host']
       command += "-h #{config['db_host']} "
     end
-
-    command += "#{config['database']} " +
-               "< #{input_file}"
+    command += "#{config['database']}"
     execute(command)
   end
 
