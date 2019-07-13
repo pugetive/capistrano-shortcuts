@@ -31,7 +31,13 @@ namespace :config do
   task :pull do
     run_locally do
       fetch(:linked_files).each do |file|
-        execute("scp #{fetch(:user)}@#{fetch(:domain)}:#{shared_path}/#{file} #{file}")
+
+        command = "scp "
+        if fetch(:aws_key_pair)
+          command += " -i #{fetch(:aws_key_pair)} "
+        end
+        command += "#{fetch(:user)}@#{fetch(:domain)}:#{shared_path}/#{file} #{file}"
+        execute(command)
       end
     end
   end
